@@ -287,3 +287,92 @@ Las historias de Storybook también tienen algunos valores, que solo sirven para
 | Todos | `import Button from './components/Button'` o `from './components'` | `import { Button } from './components/Button'` | Se importan por su nombre, entre llaves, y no hay un archivo que los reúna todos. |
 | Todos | Clases como `bg-primary`, `text-danger` o `border-default` | Colores de Tailwind directos (`bg-teal-700`, `text-red-700`…) | Esos nombres no existen en el tema. Tailwind no da error: simplemente no pinta nada. |
 | Storybook | Buscar la historia por el valor de `variant` | Nombres en español | Las historias se llaman en español y los valores están en inglés: «Solo texto» es `ghost`, «Peligro» es `danger`, «Con borde» es `outlined`, «Con sombra» es `elevated`, «Éxito» es `success` y «Aviso» es `warning`. |
+
+## 5. Prueba sin reglas
+
+- **Qué se revisa:** la pantalla del asistente, `src/screens/antes.tsx`, en el commit `030a3d6` (18 de noviembre de 2026).
+- **Cómo se hizo:** sin reglas, solo con los cuatro componentes (Button, Input, Card y Badge) y la paleta de Tailwind.
+- **Qué recoge esta sección:** todo lo que salió mal, con su archivo y línea.
+
+**En resumen:**
+
+- **14 líneas con colores de Tailwind escritos a mano.** El color principal, `teal-700`, aparece 3 veces más: ya son 11 entre los componentes y esta pantalla, y 12 contando el menú de `src/App.tsx`.
+- **3 valores entre corchetes,** fuera de la escala de Tailwind, y un tamaño de icono (22 px) que no usa ningún componente.
+- **Radios, espaciados y colores nuevos,** que no aparecen en ningún componente.
+- **5 piezas copiadas o rehechas a mano,** en lugar de usar un componente. Dos de ellas están repetidas dentro de la propia pantalla.
+- **Nombres distintos** de los de los componentes para las mismas ideas, y mezcla de español e inglés.
+
+### Valores escritos a mano
+
+**Colores de Tailwind**
+
+| Archivo y línea | Clases | Para qué | Comparado con los componentes |
+| --- | --- | --- | --- |
+| `src/screens/antes.tsx:128` | `border-slate-200` | Línea bajo la cabecera | Igual que la línea del pie de Card (`src/components/Card.tsx:95`) |
+| `src/screens/antes.tsx:130` | `bg-teal-50` `text-teal-700` | Círculo del icono de la cabecera | Copiado del cuadrado del icono de Card (`src/components/Card.tsx:81`) |
+| `src/screens/antes.tsx:135` | `text-slate-900` | Título «Asistente» | Igual que el texto de Card (`src/components/Card.tsx:55`) |
+| `src/screens/antes.tsx:142` | `text-slate-600` | Subtítulo «Cuéntame cómo te sientes» | Igual que la descripción de Card (`src/components/Card.tsx:88`) |
+| `src/screens/antes.tsx:177` | `border-slate-200` | Línea sobre el campo para escribir | Repite la línea 128 |
+| `src/screens/antes.tsx:201` | `text-slate-600` | Aviso del 112 | Igual que la ayuda de Input (`src/components/Input.tsx:108`) |
+| `src/screens/antes.tsx:238` | `bg-teal-50` `text-teal-700` | Círculo del icono del asistente | Repite la línea 130 |
+| `src/screens/antes.tsx:253` | `bg-teal-700` `text-white` | Burbuja de la persona | Colores de Button `primary` (`src/components/Button.tsx:26`) |
+| `src/screens/antes.tsx:254` | `bg-slate-100` `text-slate-900` | Burbuja del asistente | Mismo fondo que Badge `neutral` (`src/components/Badge.tsx:17`) |
+| `src/screens/antes.tsx:262` | `text-teal-100` y `text-slate-600` | Hora de los mensajes | Ningún componente usa `teal-100` como color de texto: solo como fondo |
+| `src/screens/antes.tsx:275` | `bg-slate-100` | Burbuja de «escribiendo» | Repite la línea 254 |
+| `src/screens/antes.tsx:278-280` | `bg-slate-400` | Puntos de «escribiendo» | Ningún componente usa `slate-400` como fondo |
+
+**Valores entre corchetes, tamaños de icono y tiempos**
+
+| Archivo y línea | Valor | Para qué | Problema |
+| --- | --- | --- | --- |
+| `src/screens/antes.tsx:251` | `max-w-[85%]` | Ancho máximo de las burbujas | Valor fuera de la escala de Tailwind |
+| `src/screens/antes.tsx:279` | `[animation-delay:150ms]` | Retraso del segundo punto | Valor fuera de la escala de Tailwind |
+| `src/screens/antes.tsx:280` | `[animation-delay:300ms]` | Retraso del tercer punto | Valor fuera de la escala de Tailwind |
+| `src/screens/antes.tsx:131` | `22` | Icono de la cabecera, en píxeles | Ningún componente usa 22 px: su escala es 12, 14, 16, 18 y 20 |
+| `src/screens/antes.tsx:202` | `14` | Icono del aviso, en píxeles | El icono del mensaje de Input, que es lo mismo, mide 16 (`src/components/Input.tsx:112`) |
+| `src/screens/antes.tsx:239` | `18` | Icono del asistente, en píxeles | El mismo icono mide 22 en la cabecera (línea 131) |
+| `src/screens/antes.tsx:115` | `1200` | Lo que tarda la respuesta de ejemplo, en milisegundos | Tiempo escrito a mano |
+
+**Radios, espaciados y tamaños de texto que no usa ningún componente**
+
+| Archivo y línea | Valor | Para qué | Comparado con los componentes |
+| --- | --- | --- | --- |
+| `src/screens/antes.tsx:251` y `:275` | `rounded-2xl` (16 px) | Esquinas de las burbujas | Ningún componente lo usa: Card, que es la pieza más parecida, usa `rounded-xl` (12 px) |
+| `src/screens/antes.tsx:253`, `:254` y `:275` | `rounded-br-sm` / `rounded-bl-sm` (4 px) | Esquina en pico de las burbujas | Ningún componente usa `rounded-sm` |
+| `src/screens/antes.tsx:130` y `:238` | `rounded-full` | Círculos del icono | Card usa `rounded-lg` (8 px) para lo mismo |
+| `src/screens/antes.tsx:251` | `py-2.5` (10 px) | Relleno de las burbujas | Ningún componente lo usa |
+| `src/screens/antes.tsx:275` | `py-3.5` (14 px) | Relleno de la burbuja de «escribiendo» | Distinto del de las burbujas (línea 251) |
+| `src/screens/antes.tsx:159` | `py-6` (24 px) | Margen de la lista de mensajes | Ningún componente lo usa |
+| `src/screens/antes.tsx:278-280` | `size-2` (8 px) | Puntos de «escribiendo» | Ningún componente lo usa |
+| `src/screens/antes.tsx:201` y `:262` | `text-xs` (12 px) | Aviso del 112 y hora | Solo Badge `sm` usa este tamaño |
+| `src/screens/antes.tsx:126` | `max-w-3xl` (768 px) | Ancho de la pantalla | Ningún componente fija anchos |
+| `src/screens/antes.tsx:214` | `max-w-md` (448 px) | Ancho de la tarjeta del estado vacío | Ningún componente fija anchos |
+
+### Componentes copiados en vez de usados
+
+| Qué | En la pantalla | Original | Qué cambia |
+| --- | --- | --- | --- |
+| Icono en un cuadrado de color | `src/screens/antes.tsx:130-132` (cabecera) y `:236-242` (`AssistantAvatar`) | Cuadrado del icono de Card, `src/components/Card.tsx:81-83` | Mismas clases, pero redondo en vez de con esquinas redondeadas, y con tres combinaciones de tamaño: 40 px con icono de 20 en Card, 40 px con icono de 22 en la cabecera y 32 px con icono de 18 en el avatar. Además, la cabecera no reutiliza `AssistantAvatar`, así que hay dos copias en la misma pantalla. |
+| Cabecera con icono, título y descripción | `src/screens/antes.tsx:128-146` | Cabecera de Card, `src/components/Card.tsx:79-91` | Misma estructura y mismas clases de título (`text-base font-semibold`) y descripción (`text-sm text-slate-600`). Se rehízo a mano porque Card siempre tiene fondo, borde y relleno, y su título es siempre de nivel 3, no 1. |
+| Colores de la burbuja de la persona | `src/screens/antes.tsx:253` | Button `primary`, `src/components/Button.tsx:26` | Copia los colores de la variante en lugar de usar un nombre común. Si cambia el color principal, la burbuja no se entera. |
+| Burbuja del asistente | `src/screens/antes.tsx:250-256` y `:275` | No hay componente | Escrita dos veces en la pantalla (mensaje y «escribiendo»), con distinto relleno arriba y abajo: 10 px y 14 px. |
+| Mensaje con icono | `src/screens/antes.tsx:201-204` | Mensaje de Input, `src/components/Input.tsx:103-115` | Mismo patrón (icono y texto en una fila), pero con otro tamaño de texto (12 px frente a 14), otro icono (14 px frente a 16) y otra separación (6 px frente a 4). |
+
+### Nombres distintos de los de los componentes
+
+| Idea | En los componentes | En la pantalla | Archivo y línea |
+| --- | --- | --- | --- |
+| Elegir el aspecto | `variant` (Button, Card, Badge) | El color de la burbuja lo decide `author`; no hay `variant` | `src/screens/antes.tsx:19`, `:245` y `:252-254` |
+| Idioma de los valores | Inglés: `primary`, `neutral`, `outlined`… | Español: `'persona'` y `'asistente'` | `src/screens/antes.tsx:19` |
+| Acción al pulsar | `onClick` | `onPick` | `src/screens/antes.tsx:161`, `:210` y `:225` |
+| Título | `title` (Card) | Encabezado escrito a mano | `src/screens/antes.tsx:135` |
+| Texto secundario | `description` (Card) o `hint` (Input) | Párrafo sin nombre | `src/screens/antes.tsx:142` |
+| Icono en un cuadrado | `icon`, dentro de Card | `AssistantAvatar`, y una copia sin nombre en la cabecera | `src/screens/antes.tsx:130` y `:236` |
+| Tamaño | `size="sm"`, `"md"` o `"lg"` | Clases sueltas (`size-10`, `size-8`) y números de icono (22, 18) | `src/screens/antes.tsx:130-131` y `:238-239` |
+| Nombre del componente y de su archivo | En inglés, con mayúscula inicial y el mismo nombre que el archivo (`Button` en `Button.tsx`) | `Asistente`, en español, dentro de `antes.tsx`, en minúscula y con otro nombre | `src/screens/antes.tsx:75` |
+| Idioma de los nombres | Todos en inglés | Mezcla: `Asistente` en español junto a `EmptyState`, `MessageBubble`, `AssistantAvatar` y `TypingIndicator` en inglés | `src/screens/antes.tsx:75`, `:210`, `:236`, `:244` y `:271` |
+
+### Además: apaños para encajar los componentes
+
+- `src/screens/antes.tsx:136-140`: Badge va dentro de otra pieza solo para poder ocultarlo en el móvil (`hidden sm:block`). Poner esa clase en el propio Badge chocaría con su `inline-flex`.
+- `src/screens/antes.tsx:185-186`: Input obliga a que la etiqueta «Escribe tu mensaje» se vea siempre. En un chat suele ir oculta, y aquí ocupa una línea encima del campo.
