@@ -6,6 +6,7 @@ import {
   IconPill,
   IconStethoscope,
 } from '@tabler/icons-react'
+import imagenRevision from '../stories/assets/revision-medica.svg'
 import { Badge } from './Badge'
 import { Button } from './Button'
 import { Card } from './Card'
@@ -93,6 +94,33 @@ export const Completa: Story = {
         </Button>
       </>
     ),
+  },
+}
+
+// Con imagen
+
+export const ConImagen: Story = {
+  name: 'Con imagen',
+  args: {
+    image: {
+      src: imagenRevision,
+      alt: 'Ilustración de un estetoscopio',
+    },
+    title: 'Revisión de medicina general',
+    description: 'Te toca una vez al año. La última fue en enero.',
+    footer: (
+      <Button size="sm" icon={IconCalendarEvent}>
+        Pedir cita
+      </Button>
+    ),
+  },
+}
+
+export const ConImagenYSombra: Story = {
+  name: 'Con imagen y sombra',
+  args: {
+    ...ConImagen.args,
+    variant: 'elevated',
   },
 }
 
